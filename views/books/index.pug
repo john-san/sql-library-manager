@@ -1,0 +1,11 @@
+extends ../layout
+
+block content
+  div.subheader
+    h2 Books
+    a(href="/books/new", class="btn-new") Create Book &#43;
+
+  each book in books
+    h3 
+      a(href='/books/' + book.id)= book.title
+    include by_line
