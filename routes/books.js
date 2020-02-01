@@ -16,7 +16,7 @@ function asyncHandler(cb){
 /* GET books listing. */
 router.get('/', asyncHandler(async (req, res) => {
   const books = await Book.findAll();
-  res.render("books/index", {  books , title: "SQL Library Manager" });
+  res.render("books/index", {  books , title: "Books" });
 }));
 
 /* Create a new book form. */
