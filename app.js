@@ -26,7 +26,8 @@ app.use('/books', booksRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  const err = createError(404, 'This page does not exist!');
+  const err = createError(404, "We couldn't find the page you were looking for.");
+  err.error = "Page Not Found";
   console.log('Handling 404');
   next(err);
 });
@@ -35,12 +36,13 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   console.log('Handling general error');
   // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  err.error = err.error ||  'Server Error';
+  res.locals.message = err.message || 'There was an unexpected error on the server.';
+  res.locals.error = req.app.get('env') === 'development' ? err.error : {};
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error', { err });
+  res.render('error');
 });
 
 module.exports = app;

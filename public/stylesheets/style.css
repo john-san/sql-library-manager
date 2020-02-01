@@ -92,6 +92,14 @@ input[type=text] {
   width: 300px;
 }
 
+.delete {
+  margin-top: 30px;
+}
+
+.delete .button {
+  font-weight: 400;
+}
+
 .error {
   color: rgb(236, 15, 15);
 }

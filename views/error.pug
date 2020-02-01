@@ -2,8 +2,9 @@ extends layout
 
 block content
   .error-message
-    h2 Error #{err.status}: #{err.message}
+    h1= error
 
-    h4 Here's the stack trace in case you want to know more.
-    
-    .error-stack= err.stack
+    p Sorry!  #{message}
+
+    P
+      a.button(href='/') Home
