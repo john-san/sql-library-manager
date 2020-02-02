@@ -1,4 +1,5 @@
-var createError = require('http-errors');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 const express = require('express');
 const router = express.Router();
 const Book = require('../models').Book;
@@ -14,6 +15,49 @@ function asyncHandler(cb){
   }
 }
 
+async function generalSearch(query) {
+  const year = parseInt(query);
+
+  // if query is not a number, run search to match title, author, or genre. 
+  // otherwise, run search to match exact year.
+  if (isNaN(year)) {
+    return await Book.findAll({
+      where: {
+        [Op.or]: [
+          {
+            title: {
+              [Op.like]: `%${query}%`
+            }
+          },
+          {
+            author: {
+              [Op.like]: `%${query}%`
+            }
+          },
+          {
+            genre: {
+              [Op.like]: `%${query}%`
+            }
+          }
+        ]
+      },
+      order: [["title", "ASC"]]
+    });
+  } else {
+    return await Book.findAll({
+      where: {
+        year: {
+          [Op.eq]: year
+        }
+      },
+      order: [["title", "ASC"]]
+    });
+  }
+
+  
+
+}
+
 /* GET list of books */
 router.get('/', asyncHandler(async (req, res) => {
   const books = await Book.findAll({
@@ -22,6 +66,13 @@ router.get('/', asyncHandler(async (req, res) => {
   // uncomment below line and visit root to test general error handler
   // throw new Error(); 
   res.render("books/index", {  books , title: "Books" });
+}));
+
+/* GET, search for books */
+router.get('/search', asyncHandler(async (req, res) => {
+  const books = await generalSearch(req.query.q);
+  
+  res.render("books/search", {  books , title: "Search" });
 }));
 
 /* GET form to create new book */

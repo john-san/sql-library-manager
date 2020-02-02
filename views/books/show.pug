@@ -2,10 +2,10 @@ extends ../layout
 
 block content
   h1= book.title
-  include book-detail
-  p= book.body
-  a(href="../") &larr; Back 
+  include partials/book-detail
+  
+  a(href="/") &larr; Back 
   | | 
-  a(href="/books/" + book.id + "/edit") Edit Book 
+  a(href=`/books/${book.id}/edit`) Edit Book 
   | | 
-  a(href="/books/" + book.id + "/delete") Delete Book
+  a(href=`/books/${book.id}/delete`) Delete Book

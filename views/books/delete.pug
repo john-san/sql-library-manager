@@ -3,7 +3,7 @@ extends ../layout
 block content
   h1= title
   h3= book.title
-  include book-detail
+  include partials/book-detail
   
   h2 Are you sure you want to delete the book, "#{book.title}"?
   form(action="/books/" + book.id + "/delete", method="post")

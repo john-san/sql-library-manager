@@ -92,16 +92,24 @@ input[type=text] {
   width: 300px;
 }
 
+#search-submit {
+  margin-left: 15px;
+}
+
+.book-list {
+  margin: 25px 0;
+}
+
+.no-results {
+  margin: 40px auto;
+}
+
 .delete {
   margin-top: 30px;
 }
 
 .delete .button {
   font-weight: 400;
-}
-
-#search-submit {
-  margin-left: 15px;
 }
 
 .error {
