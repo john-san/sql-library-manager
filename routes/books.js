@@ -3,6 +3,7 @@ const Op = Sequelize.Op;
 const express = require('express');
 const router = express.Router();
 const Book = require('../models').Book;
+const sequelize = require('../models').sequelize;
 
 /* Handler function to wrap each route */
 function asyncHandler(cb){
@@ -15,6 +16,7 @@ function asyncHandler(cb){
   }
 }
 
+/* provide search functionality */
 async function generalSearch(query) {
   const year = parseInt(query);
 
@@ -53,19 +55,38 @@ async function generalSearch(query) {
       order: [["title", "ASC"]]
     });
   }
+}
 
-  
+function getPageParams(req) {
+  const pageParams = {
+    limit: 5,
+    page: 1, // for UI
+    queryPage: 0 // for queries
+  };
 
+  if (req.query.page) {
+    pageParams.page = parseInt(req.query.page);
+    pageParams.queryPage = pageParams.page - 1;
+  } 
+
+  return pageParams;
 }
 
 /* GET list of books */
 router.get('/', asyncHandler(async (req, res) => {
-  const books = await Book.findAll({
-    order: [["title", "ASC"]]
+  const pageParams = getPageParams(req);
+  
+  // destructure books & count from findAndCountAll
+  // https://stackoverflow.com/questions/47546824/sequelize-configuration-to-retrieve-total-count-with-details , Yuriy Rykpa
+  const { rows: books, count }= await Book.findAndCountAll({
+    order: [["title", "ASC"]],
+    limit: pageParams.limit,
+    offset: pageParams.limit * pageParams.queryPage
   });
-  // uncomment below line and visit root to test general error handler
-  // throw new Error(); 
-  res.render("books/index", {  books , title: "Books" });
+  
+  pageParams.numberOfPages = Math.ceil(count / pageParams.limit);
+
+  res.render("books/index", {  books , pageParams, title: "Books" });
 }));
 
 /* GET, search for books */

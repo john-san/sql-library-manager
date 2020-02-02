@@ -14,6 +14,16 @@ if books.length > 0
         td= book.author
         td= book.genre
         td= book.year
+  
+  .pagination
+    - var num = 1;
+    ul
+      while num <= pageParams.numberOfPages
+        li
+          if (num === pageParams.page)
+            a.active= num++
+          else
+            a(href=`/books?page=${num}`)= num++
 else
   .no-results
     p No results found.  Please try a different search.
