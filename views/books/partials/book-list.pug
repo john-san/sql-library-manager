@@ -14,22 +14,23 @@ if books.length > 0
         td= book.author
         td= book.genre
         td= book.year
-  
-  .pagination
-    - var num = 1;
-    ul
-      while num <= pageParams.numberOfPages
-        li
-          if (num === pageParams.page)
-            a.active= num++
-          else
-            if (pageParams.q)
-              a(href=`/books/search?q=${pageParams.q}&page=${num}`)= num++
+  if pageParams
+    .pagination
+      - var num = 1;
+      ul
+        while num <= pageParams.numberOfPages
+          li
+            if (num === pageParams.page)
+              a.active= num++
             else
-              a(href=`/books?page=${num}`)= num++
+              if (pageParams.q)
+                a(href=`/books/search?q=${pageParams.q}&page=${num}`)= num++
+              else
+                a(href=`/books?page=${num}`)= num++
 else
   .no-results
     p No results found.  Please try a different search.
 
 .text-center.footer
   a.button(href='/') Back to Home
+  a.button(href='/books/view-all') View Entire Library

@@ -97,6 +97,14 @@ router.get('/', asyncHandler(async (req, res) => {
   res.render("books/index", {  books , pageParams, title: "Books" });
 }));
 
+router.get('/view-all', asyncHandler(async (req, res) => {
+  const books = await Book.findAll({
+    order: [["title", "ASC"]],
+  });
+  
+  res.render("books/index", {  books,  title: "All Books" });
+}));
+
 /* GET, search for books */
 router.get('/search', asyncHandler(async (req, res) => {
   const pageParams = getPageParams(req);
