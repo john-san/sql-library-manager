@@ -138,14 +138,9 @@ router.get("/:id/edit", asyncHandler(async(req, res, next) => {
   }
 }));
 
-/* GET view for individual book */
+/* GET view for individual book, redirect to edit view */
 router.get("/:id", asyncHandler(async (req, res, next) => {
-  const book = await Book.findByPk(req.params.id);
-  if (book) {
-    res.render("books/show", { book, title: book.title }); 
-  } else {
-    return next(); // 404
-  }
+  res.redirect(`/books/${req.params.id}/edit`);
 })); 
 
 /* Update a book */

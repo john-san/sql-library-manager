@@ -5,7 +5,7 @@ block content
   
   include partials/form-errors
   
-  form(action="/books/" + book.id + "/edit", method="post")
+  form.book-form(action="/books/" + book.id + "/edit", method="post")
     include partials/form
 
     

@@ -1,6 +1,23 @@
+@import url('https://fonts.googleapis.com/css?family=Crimson+Text|Libre+Baskerville&display=swap');
+/*  font-family: 'Libre Baskerville', serif;
+    font-family: 'Crimson Text', serif;  */
 body {
   padding: 10px 50px 50px;
-  font: 18px "Garamond", serif;
+  /* font: 18px "Garamond", serif; */
+  font-family: 'Crimson Text', serif;
+  font-size: 18px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  font-family: 'Libre Baskerville', serif;
+}
+
+.text-center {
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
 }
 
 a {
@@ -8,6 +25,7 @@ a {
   text-decoration: none;
   font-weight: bold;
   transition: 0.4s;
+  letter-spacing: 1px;
 }
 
   a:hover {
@@ -17,11 +35,13 @@ a {
 a.button, input[type=submit] {
   color: white;
   background: #019875;
-  font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+  /* font-family: "Lucida Grande", Helvetica, Arial, sans-serif; */
+  font-family: 'Libre Baskerville', serif;
   padding: 10px 14px 12px;
   font-size: 14px;
   border-radius: 2px;
   cursor: pointer;
+  border-radius: 6px;
 }
 
 form a.button, input[type=submit] {
@@ -80,7 +100,8 @@ label {
 
 input {
   padding: 10px;
-  font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+  /* font-family: "Lucida Grande", Helvetica, Arial, sans-serif; */
+  font-family: 'Libre Baskerville', serif;
   font-size: 14px;
   border-radius: 2px;
   border-color: #E7E7E7;
@@ -92,21 +113,35 @@ input[type=text] {
   width: 300px;
 }
 
+.search-container form {
+  display: flex;
+  justify-content: center;
+}
+
+#search-input {
+  flex-basis: 300px;
+}
+
 #search-submit {
   margin-left: 15px;
 }
 
 .book-list {
-  margin: 25px 0;
+  margin: 25px auto;
 }
 
 .no-results {
   margin: 40px auto;
 }
 
+.footer {
+  margin-top: 50px;
+}
+
 .pagination {
   margin: 40px 0 0 0;
   text-align: center;
+  font-size: 24px;
 }
 .pagination li {
   display: inline;
