@@ -195,6 +195,15 @@ input[type=text] {
   font-weight: 400;
 }
 
+.delete-form {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.no-results {
+  text-align: center;
+}
+
 .error {
   color: rgb(236, 15, 15);
   text-align: center;

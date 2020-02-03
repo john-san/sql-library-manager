@@ -83,7 +83,7 @@ function getPageParams(req) {
 /* GET list of books */
 router.get('/', asyncHandler(async (req, res) => {
   const pageParams = getPageParams(req);
-  
+
   // destructure books & count from findAndCountAll
   // https://stackoverflow.com/questions/47546824/sequelize-configuration-to-retrieve-total-count-with-details , Yuriy Rykpa
   const { rows: books, count } = await Book.findAndCountAll({
@@ -97,6 +97,7 @@ router.get('/', asyncHandler(async (req, res) => {
   res.render("books/index", {  books , pageParams, title: "Books" });
 }));
 
+/* View entire library */
 router.get('/view-all', asyncHandler(async (req, res) => {
   const books = await Book.findAll({
     order: [["title", "ASC"]],
