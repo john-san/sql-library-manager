@@ -23,7 +23,12 @@ if books.length > 0
           if (num === pageParams.page)
             a.active= num++
           else
-            a(href=`/books?page=${num}`)= num++
+            if (pageParams.q)
+              a(href=`/books/search?q=${pageParams.q}&page=${num}`)= num++
+            else
+              a(href=`/books?page=${num}`)= num++
 else
   .no-results
     p No results found.  Please try a different search.
+
+a.button(href='/') Back to Home

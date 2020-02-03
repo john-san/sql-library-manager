@@ -17,13 +17,13 @@ function asyncHandler(cb){
 }
 
 /* provide search functionality */
-async function generalSearch(query) {
+async function generalSearch(query, pageParams) {
   const year = parseInt(query);
 
   // if query is not a number, run search to match title, author, or genre. 
   // otherwise, run search to match exact year.
   if (isNaN(year)) {
-    return await Book.findAll({
+    return await Book.findAndCountAll({
       where: {
         [Op.or]: [
           {
@@ -43,16 +43,20 @@ async function generalSearch(query) {
           }
         ]
       },
-      order: [["title", "ASC"]]
+      order: [["title", "ASC"]],
+      limit: pageParams.limit,
+      offset: pageParams.limit * pageParams.queryPage
     });
   } else {
-    return await Book.findAll({
+    return await Book.findAndCountAll({
       where: {
         year: {
           [Op.eq]: year
         }
       },
-      order: [["title", "ASC"]]
+      order: [["title", "ASC"]],
+      limit: pageParams.limit,
+      offset: pageParams.limit * pageParams.queryPage
     });
   }
 }
@@ -69,6 +73,10 @@ function getPageParams(req) {
     pageParams.queryPage = pageParams.page - 1;
   } 
 
+  if (req.query.q) {
+    pageParams.q = req.query.q;
+  }
+
   return pageParams;
 }
 
@@ -78,7 +86,7 @@ router.get('/', asyncHandler(async (req, res) => {
   
   // destructure books & count from findAndCountAll
   // https://stackoverflow.com/questions/47546824/sequelize-configuration-to-retrieve-total-count-with-details , Yuriy Rykpa
-  const { rows: books, count }= await Book.findAndCountAll({
+  const { rows: books, count } = await Book.findAndCountAll({
     order: [["title", "ASC"]],
     limit: pageParams.limit,
     offset: pageParams.limit * pageParams.queryPage
@@ -91,9 +99,11 @@ router.get('/', asyncHandler(async (req, res) => {
 
 /* GET, search for books */
 router.get('/search', asyncHandler(async (req, res) => {
-  const books = await generalSearch(req.query.q);
-  
-  res.render("books/search", {  books , title: "Search" });
+  const pageParams = getPageParams(req);
+  const { rows: books, count } = await generalSearch(req.query.q, pageParams);
+  pageParams.numberOfPages = Math.ceil(count / pageParams.limit);
+
+  res.render("books/search", {  books, pageParams , title: `Search for "${req.query.q}"` });
 }));
 
 /* GET form to create new book */
@@ -108,6 +118,7 @@ router.post('/', asyncHandler(async (req, res) => {
     book = await Book.create(req.body);
     res.redirect("/books/" + book.id);
   } catch (error) {
+    // if there are any validation errors, render new book form and display errors
     if (error.name === "SequelizeValidationError") {
       book = await Book.build(req.body);
       res.render("books/new-book", {  book, errors: error.errors, title: "New Book" })
@@ -149,6 +160,7 @@ router.post('/:id/edit', asyncHandler(async (req, res, next) => {
       return next(); // 404
     }
   } catch (error) {
+    // if there are any validation errors, render edit book form and display errors
     if (error.name === "SequelizeValidationError") {
       book = await Book.build(req.body);
       book.id = req.params.id;
